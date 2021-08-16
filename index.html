@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Tabs</title>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      padding-top: 10px;
+    }
+    .tabs {
+      overflow: hidden;
+      background: #F2F2F2;
+      border: #E0E0E0 solid 1px;
+      box-shadow: inset 10px 0 9px -7px rgba(88, 90, 90, 0.3), inset -10px 0 9px -7px rgba(88, 90, 90, 0.3);   
+    }
+    .tabs__container {
+      display: flex;
+      padding: 0;
+      margin: 0;
+      padding: 8px;    
+    }
+    .tabs__item {
+      -webkit-touch-callout: none; 
+      -webkit-user-select: none;   
+      -moz-user-select: none;      
+      list-style-type: none;  
+      user-select: none;
+      cursor: pointer;
+    }
+    .tabs__item:hover{
+      background: #E0E0E0;
+    }
+    .active_li{
+      background: #CFE5FF;
+      color: #527AAA;
+    }
+    .disable{
+      color: #AFAFAF;
+      pointer-events: none;
+      cursor: default;     
+    }
+    @media only screen and (min-width: 451px){
+      .tabs__item {
+        white-space: nowrap;
+        padding: 10px 30px;
+        margin: 10px;
+        padding: 8px 24px;
+        border-radius: 2px;
+      }
+    }
+    @media only screen and (max-width: 450px){
+      .tabs__container{
+        padding: 0px;
+      }
+      .tabs__item {
+        white-space: nowrap;
+        padding: 10px 15px;
+        margin: 10px;
+        border-radius: 2px;
+      }
+    }
+  </style>
+  <script> 
+    document.addEventListener('DOMContentLoaded', function() {
+      const items = document.querySelectorAll('.tabs__item');
+      const tabs = document.querySelector('#tabs');
+      let isDragged = false;
+      let currentScroll = 0;
+      let startPosition = 0;
+      let shift = 0;
+      function startMove(e) {
+        currentScroll = tabs.scrollLeft;
+        startPosition = e.type === 'mousedown' ? e.pageX : e.touches[0].pageX;
+        isDragged = true;
+      }
+
+      function moving(e) {
+        if (isDragged) {
+          const pageX = e.type === 'mousemove' ? e.pageX : e.touches[0].pageX;
+          shift = startPosition - pageX + currentScroll;
+          tabs.scrollLeft = shift;
+        }
+      }
+
+      function stopMove() {
+        isDragged = false;
+        shift = 0;
+      }
+
+      function toggleClass(e) {
+        [].forEach.call(items, function(el) {
+          el.classList.remove('active_li');
+        });
+        e.target.classList.add('active_li');
+      }
+
+      tabs.addEventListener('mousedown', startMove);
+      tabs.addEventListener('touchstart', startMove);
+      tabs.addEventListener('mousemove', moving);
+      tabs.addEventListener('touchmove', moving);
+      tabs.addEventListener('mouseup', stopMove);
+      tabs.addEventListener('touchcancel', stopMove);
+
+      items.forEach(function (entry) {
+        entry.addEventListener('mouseup', toggleClass);
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="tabs" id="tabs">
+  <ul class="tabs__container" id="tabs_content">
+    <li class="tabs__item disable">Job Focus</li>
+    <li class="tabs__item" >Soft Skills</li>
+    <li class="tabs__item" >Technical Skills</li>
+    <li class="tabs__item">Functional Expertise</li>
+    <li class="tabs__item" >Domain Expertise</li>
+    <li class="tabs__item">Patent Expertise</li>
+    <li class="tabs__item" >Personal Expertise</li>
+    <li class="tabs__item" >Hard Expertise</li>
+    <li class="tabs__item">Compliance Expertise</li>
+  </ul>
+</div>
+</body>
+</html>
